@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'xyz.wagyourtail.unimined' version '1.4.1'
+}
+
+group 'top.outlands.nonupdate'
+version '1.0.0'
+
+base {
+    archivesName = "NonUpdateModern"
+}
+
+// this is just here so we can test the outputs easier and clean between tests
+unimined.useGlobalCache = false
+
+
+repositories {
+    mavenCentral()
+}
+
+unimined.minecraft {
+    version project.minecraft_version
+
+    mappings {
+        intermediary()
+        mojmap()
+        parchment("1.20.1", "2023.09.03")
+
+        devFallbackNamespace "intermediary"
+    }
+
+    minecraftForge {
+        loader project.forge_version
+    }
+
+    defaultRemapJar = false
+}
+
+
+dependencies {
+    // we need this in main where it isn't by default
+}
+
+jar {
+    //enabled = false
+}
+
