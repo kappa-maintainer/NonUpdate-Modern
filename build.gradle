@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'xyz.wagyourtail.unimined' version '1.4.1'
+    id 'com.gradleup.shadow'  version '9.0.0-rc1'
 }
 
 group 'top.outlands.nonupdate'
-version '1.0.1'
+version '1.0.2'
 
 base {
     archivesName = "NonUpdateModern"
@@ -36,12 +37,34 @@ unimined.minecraft {
     defaultRemapJar = false
 }
 
+configurations {
+    implementation.extendsFrom shadow
+}
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+    }
+    maven { url "https://maven.bawnorton.com/releases" }
+
+    // Mirror
+    maven { url "https://maven.enjarai.dev/mirrors" }
+}
 
 dependencies {
     // we need this in main where it isn't by default
+    implementation ("curse.maven:mana-and-artifice-406360:6376257")
+    //shadow annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.3")
 }
 
 jar {
+    manifest.attributes.put("MixinConfigs", "nonupdate.mixin.json")
     //enabled = false
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    relocate("com.bawnorton.mixinsquared", "top.outlands.nonupdate.mixinsquared")
+    mergeServiceFiles()
 }
 
